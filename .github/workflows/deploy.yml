@@ -11,7 +11,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2 # Cambiado a v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -23,9 +23,9 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
+          cd dc-dashboard  # <--- Agrega esta línea
           docker build -t ${{ steps.login-ecr.outputs.registry }}/dc-dashboard-repo:latest .
           docker push ${{ steps.login-ecr.outputs.registry }}/dc-dashboard-repo:latest
-
       - name: Redeploy ECS Task
         run: |
           aws ecs update-service --cluster dc-ops-cluster --service dc-ops-service --force-new-deployment
