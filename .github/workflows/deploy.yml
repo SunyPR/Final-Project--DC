@@ -23,9 +23,9 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          cd dc-dashboard  # <--- Agrega esta línea
-          docker build -t ${{ steps.login-ecr.outputs.registry }}/dc-dashboard-repo:latest .
+          docker build -t ${{ steps.login-ecr.outputs.registry }}/dc-dashboard-repo:latest ./dc-dashboard
           docker push ${{ steps.login-ecr.outputs.registry }}/dc-dashboard-repo:latest
+          
       - name: Redeploy ECS Task
         run: |
           aws ecs update-service --cluster dc-ops-cluster --service dc-ops-service --force-new-deployment
